@@ -3,6 +3,7 @@
 #date: 2013-07-05
 
 import sys
+import os
 import BaseHTTPServer
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 import socket
@@ -39,16 +40,23 @@ class HandlerClass(SimpleHTTPRequestHandler):
             del request[addr_pair]
             request[addr_pair]=[num,ts]
         file=open("index.html", "w")
-        file.write("<!DOCTYPE html> <html> <body><center><h1><font color=\"blue\" face=\"Georgia, Arial\" size=8><em>Real</em></font> Visit Results</h1></center>");
+        file.write("<!DOCTYPE html> <html> <body><center><h1>Simple Web</h1></center>");
+
+        file.write("<p><h3>Environment variables</h3><ul>")
+        for k, v in os.environ.items():
+            file.write("<li><font color=\"green\">%s</font> = %s</li>" % (k, v))
+        file.write("</ul></p>")
+
+        file.write("<p><h3>Requests</h3><ul>")
         for pair in request:
             if pair[0] == host:
-                guest = "LOCAL: "+pair[0]
+                guest = "local: "+pair[0]
             else:
                 guest = pair[0]
             if (time_now-datetime.strptime(request[pair][1],'%Y-%m-%d %H:%M:%S')).seconds < 3:
-                file.write("<p style=\"font-size:150%\" >#"+ str(request[pair][1]) +": <font color=\"red\">"+str(request[pair][0])+ "</font> requests " + "from &lt<font color=\"blue\">"+guest+"</font>&gt to WebServer &lt<font color=\"blue\">"+pair[1]+"</font>&gt</p>")
+                file.write("<p>#"+ str(request[pair][1]) +": <font color=\"red\">"+str(request[pair][0])+ "</font> requests " + "from &lt<font color=\"blue\">"+guest+"</font>&gt to WebServer &lt<font color=\"blue\">"+pair[1]+"</font>&gt</p>")
             else:
-                file.write("<p style=\"font-size:150%\" >#"+ str(request[pair][1]) +": <font color=\"maroon\">"+str(request[pair][0])+ "</font> requests " + "from &lt<font color=\"navy\">"+guest+"</font>&gt to WebServer &lt<font color=\"navy\">"+pair[1]+"</font>&gt</p>")
+                file.write("<p>#"+ str(request[pair][1]) +": <font color=\"maroon\">"+str(request[pair][0])+ "</font> requests " + "from &lt<font color=\"navy\">"+guest+"</font>&gt to WebServer &lt<font color=\"navy\">"+pair[1]+"</font>&gt</p>")
         file.write("</body> </html>");
         file.close()
         pickle.dump(request,open("pickle_data.txt","w"))
