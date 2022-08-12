@@ -1,0 +1,7 @@
+
+
+To grant repository access for a successful build
+1.	Navigate to the bitbucket repository in Docker Hub, and select your bitbucket.
+2.	Click on the Teams tab and select the team that you’d like to configure repository access to.
+3.	Click on the Permissions tab and select a repository from the Repository drop-down.
+4.	Choose a permission from the Permissions drop-down list and click Add.
